@@ -12,5 +12,7 @@ class ProfileAdmin(admin.ModelAdmin):
         "date_joined",
         "is_active",
     )
+    prepopulated_fields = {"slug": ("username",)}
+    search_fields = ("username", "email")
     list_filter = ("date_joined",)
     list_per_page = 50
