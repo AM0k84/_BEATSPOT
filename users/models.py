@@ -18,7 +18,7 @@ class Profile(AbstractUser, HitCountMixin):
     instagram_url = models.URLField(max_length=500, blank=True, null=True)
     website_url = models.URLField(max_length=500, blank=True, null=True)
     slug = models.SlugField(null=False, unique=True)
-    acc = models.CharField(max_length=10)
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
