@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pofile {{ profile.username }}</title>
+</head>
+<body>
+Username:
+<br>
+{{ profile.username }}
+
+<br><br>
+
+{% with total_followers=profile.followers.count %}
+    ({{ total_followers }} Follower {{ total_followers|pluralize:'s' }})
+{% endwith %}
+
+<br>
+
+
+
+Following me:
+<br>
+{% for follower in profile.followers.all %}
+    {{ follower.username }} <br>
+{% endfor %}
+
+<br><br>
+
+
+
+{% with total_followers=profile.following.count %}
+    ({{ total_followers }} I follow)
+{% endwith %}
+
+<br>
+
+I follow:
+<br>
+{% for follower in profile.following.all %}
+    {{ follower.username }} <br>
+{% endfor %}
+
+<br><br>
+
+Views:
+{{ hitcount.total_hits }}
+
+
+</body>
+</html>

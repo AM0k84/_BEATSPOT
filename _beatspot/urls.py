@@ -17,10 +17,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from users.views import ProfileDetailView
 
 urlpatterns = [
+
     path("admin/", admin.site.urls),
-    # path("user/", include("users.urls"))
+
+
+
+    # path("user/", include("users.urls")),
+    path("<slug:slug>", ProfileDetailView.as_view(), name='profile'),
+
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
