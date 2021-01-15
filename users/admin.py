@@ -6,30 +6,28 @@ from .models import Profile, UserFollowing
 class FollowsToInLine(admin.TabularInline):
     model = UserFollowing
     extra = 2
-    fk_name = 'follows_to'
+    fk_name = "follow_to"
     can_delete = False
 
 
 class FollowingFromLine(admin.TabularInline):
     model = UserFollowing
     extra = 2
-    fk_name = 'following_from'
+    fk_name = "following_from"
     can_delete = False
 
 
 @admin.register(UserFollowing)
 class UserFollowingAdmin(admin.ModelAdmin):
-    list_display = ("id", 'following_from', 'follows_to', 'created')
-    search_fields = ("following_from__username", 'follows_to__username')
-    list_filter = ('created',)
+    list_display = ("id", "following_from", "follow_to", "created")
+    search_fields = ("following_from__username", "follow_to__username")
+    list_filter = ("created",)
     list_per_page = 50
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    inlines = [
-        FollowsToInLine, FollowingFromLine
-    ]
+    inlines = [FollowsToInLine, FollowingFromLine]
     list_display = (
         "id",
         "username",
