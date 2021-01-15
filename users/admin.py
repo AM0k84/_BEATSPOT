@@ -22,7 +22,7 @@ class UserFollowingAdmin(admin.ModelAdmin):
     list_display = ("id", "following_from", "follow_to", "created")
     search_fields = ("following_from__username", "follow_to__username")
     list_filter = ("created",)
-    list_per_page = 50
+    list_per_page = 10
 
 
 @admin.register(Profile)
