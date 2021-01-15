@@ -19,6 +19,7 @@ class Profile(AbstractUser, HitCountMixin):
     website_url = models.URLField(max_length=500, blank=True, null=True)
     slug = models.SlugField(null=False, unique=True)
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.username)
