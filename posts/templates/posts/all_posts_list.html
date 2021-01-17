@@ -2,12 +2,35 @@
 {% load static %}
 
 {% block body %}
+    <div class="infinite-container">
+        <div class="infinite-item">
             {% for post in all_posts %}
-                {{ post.title }} <br>
+                {{ post.title }} <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
             {% endfor %}
         </div>
     </div>
+
+    {% if page_obj.has_next %}
+        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">next</a>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static "js/jquery.waypoints.min.js" %}"></script>
+    <script src="{% static "js/infinite.min.js" %}"> </script>
+    <script>
+        var infinite = new Waypoint.Infinite({
+            element: $('.infinite-container')[0],
+
+            offset: 'bottom-in-view',
+
+            onBeforePageLoad: function () {
+                $('.loading').show();
+            },
+            onAfterPageLoad: function () {
+                $('.loading').hide();
+            }
+
+        });
+    </script>
 {% endblock %}
