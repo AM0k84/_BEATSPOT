@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "hitcount",
+    'django_admin_inline_paginator',
 ]
 
 MIDDLEWARE = [
