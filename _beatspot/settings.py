@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users",
     "hitcount",
-    'django_admin_inline_paginator',
+    "django_admin_inline_paginator",
+    "users",
+    "posts",
 ]
 
 MIDDLEWARE = [
