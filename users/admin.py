@@ -1,7 +1,7 @@
 from django.contrib import admin
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from .models import Profile, UserFollowing
-from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 
 class FollowsToInLine(TabularInlinePaginated):

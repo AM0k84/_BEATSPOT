@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 
 
 class Created(models.Model):
@@ -13,7 +13,8 @@ class Created(models.Model):
 
 class Post(Created):
     title = models.CharField(max_length=120)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="author")
+    is_promoted = models.BooleanField(default=False)
     slug = models.SlugField(null=False, unique=False)
 
     def save(self, *args, **kwargs):
