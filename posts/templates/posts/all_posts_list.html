@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'web/base.html' %}
+{% load static %}
 
-{% for post in all_posts %}
-    {{ post.title }} <br>
-{% endfor %}
+{% block body %}
+            {% for post in all_posts %}
+                {{ post.title }} <br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
 
-
-</body>
-</html>
+{% block scripts %}
+{% endblock %}

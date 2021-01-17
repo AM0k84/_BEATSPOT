@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django_admin_inline_paginator",
     "users",
     "posts",
+    'web',
 ]
 
 MIDDLEWARE = [
