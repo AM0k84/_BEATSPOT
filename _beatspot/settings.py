@@ -13,6 +13,7 @@ import os
 
 from decouple import config
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,9 +39,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users",
+
     "hitcount",
-    'django_admin_inline_paginator',
+    "django_admin_inline_paginator",
+
+
+
+    "users",
+    "posts",
 ]
 
 MIDDLEWARE = [
@@ -66,9 +72,12 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+
+
             ],
         },
     },
+
 ]
 
 WSGI_APPLICATION = "_beatspot.wsgi.application"
