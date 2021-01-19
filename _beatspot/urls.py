@@ -22,8 +22,11 @@ from users.views import ProfileDetailView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("user/", include("users.urls")),
+
+
     path("<slug:slug>", ProfileDetailView.as_view(), name="profile"),
+
+
     path("posts/", include("posts.urls")),
 ]
 

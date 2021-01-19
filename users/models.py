@@ -16,7 +16,6 @@ class UserFollowing(models.Model):
         constraints = [models.UniqueConstraint(fields=["following_from", "follow_to"], name="unique_followers")]
         ordering = ("-created",)
 
-
     def __str__(self):
         return f"FROM:{self.following_from} TO:{self.follow_to}"
 
@@ -42,8 +41,6 @@ class Profile(AbstractUser, HitCountMixin):
     hit_count_generic = GenericRelation(
         MODEL_HITCOUNT, object_id_field="object_pk", related_query_name="hit_count_generic_relation"
     )
-
-
 
     class Meta:
         verbose_name = _("profile")

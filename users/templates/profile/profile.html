@@ -1,54 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pofile {{ profile.username }}</title>
-</head>
-<body>
-Username:
-<br>
-{{ profile.username }}
+{% extends 'web/base.html' %}
+{% load static %}
 
-<br><br>
+{% block title %} Pofile {{ profile.username }} {% endblock %}
 
-{% with total_followers=profile.followers.count %}
-    ({{ total_followers }} Follower {{ total_followers|pluralize:'s' }})
-{% endwith %}
-
-<br>
+{% block body %}
 
 
 
-Following me:
-<br>
-{% for follower in profile.followers.all %}
-    {{ follower.username }} <br>
-{% endfor %}
+    Username:
+    {{ profile.username }}
+    <br>
+    REQUEST:
+    {{ request.user.username }}
 
-<br><br>
+    <br><br>
+    {% if request.user in profile.following.all %}
+    {{ profile.username }} MNIE SUBUJE
+    {% else %}
+        {{ profile.username }} nie subuje
+    {% endif %}
 
+    <br>
 
+    {% if request.user not in profile.followers.all %}
+        Ja ({{ request.user.username }}) jego nie subuje
+    {% else %}
+        JA ({{ request.user.username }})  JEGO SUBUJE
+    {% endif %}
 
-{% with total_followers=profile.following.count %}
-    ({{ total_followers }} I follow)
-{% endwith %}
+    <br><br>
 
-<br>
-
-I follow:
-<br>
-{% for follower in profile.following.all %}
-    {{ follower.username }} <br>
-{% endfor %}
-
-<br><br>
-
-Views:
-{{ hitcount.total_hits }}
+    {% with total_followers=profile.followers.count %}
+        ({{ total_followers }} Follower) <br>
+    {% endwith %}
 
 
 
 
+    Following me:
+    <br>
+    {% for follower in profile.followers.all %}
+        {{ follower.username }} <br>
+    {% endfor %}
 
-</body>
-</html>
+    <br><br>
+
+
+
+    {% with total_followers=profile.following.count %}
+        ({{ total_followers }} I follow)
+    {% endwith %}
+
+    <br>
+
+    I follow:
+    <br>
+    {% for follower in profile.following.all %}
+        {{ follower.username }} <br>
+    {% endfor %}
+
+    <br><br>
+
+    Views:
+    {{ hitcount.total_hits }}
+
+
+{% endblock %}
+
