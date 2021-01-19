@@ -43,6 +43,8 @@ class Profile(AbstractUser, HitCountMixin):
         MODEL_HITCOUNT, object_id_field="object_pk", related_query_name="hit_count_generic_relation"
     )
 
+
+
     class Meta:
         verbose_name = _("profile")
         verbose_name_plural = _("profiles")
