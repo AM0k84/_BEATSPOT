@@ -11,24 +11,55 @@
     {{ profile.username }}
     <br>
     REQUEST:
-    {{ request.user.username }}
+    {{ request.user.username }} == {{ profile.username }}
+    <br>
+    {% if  request.user.username == profile.username %}
+        NIE WYŚWIETLAJ FOLOŁA
+    {% else %}
+        Wyświetlaj
+    {% endif %}
+
 
     <br><br>
     {% if request.user in profile.following.all %}
-    {{ profile.username }} MNIE SUBUJE
+        {{ profile.username }} mnie subuje
     {% else %}
-        {{ profile.username }} nie subuje
+        {{ profile.username }} mnie nie subuje
     {% endif %}
 
     <br>
 
+
+
+
+
+
+
+
+
+
+
+
     {% if request.user not in profile.followers.all %}
-        Ja ({{ request.user.username }}) jego nie subuje
+        Ja ({{ request.user.username }}) nie subuje {{ profile.username }}
     {% else %}
-        JA ({{ request.user.username }})  JEGO SUBUJE
+        JA ({{ request.user.username }})  subuje {{ profile.username }}
     {% endif %}
 
     <br><br>
+
+    <form action="{% url 'users:follow_user' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ profile.id }}">
+
+        {% if request.user in profile.followers.all %}
+            <button type="submit">UNFOLLOW</button>
+        {% else %}
+            <button type="submit">FOLLOW</button>
+        {% endif %}
+    </form>
+
+    <br>
 
     {% with total_followers=profile.followers.count %}
         ({{ total_followers }} Follower) <br>
