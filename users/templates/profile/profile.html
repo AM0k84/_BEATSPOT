@@ -8,33 +8,22 @@
     Username:
     {{ profile.username }}
     <br>
-    REQUEST:
-    {{ request.user.username }} == {{ profile.username }}
-    <br>
-    {% if  request.user.username == profile.username %}
-        NIE WYŚWIETLAJ FOLOŁA
-    {% else %}
-        Wyświetlaj
-    {% endif %}
-
-
-    <br><br>
-    {% if request.user in profile.following.all %}
-        {{ profile.username }} mnie subuje
-    {% else %}
-        {{ profile.username }} mnie nie subuje
-    {% endif %}
-
     <br>
 
-
-    {% if request.user not in profile.followers.all %}
-        Ja ({{ request.user.username }}) nie subuje {{ profile.username }}
-    {% else %}
-        JA ({{ request.user.username }})  subuje {{ profile.username }}
+    {% if  request.user.username != profile.username %}
+        <form action="{% url 'users:follow_user' %}" method="POST" class="follow-form" id="{{ profile.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ profile.id }}" class="follow_id">
+            <button type="submit" class="follow-btn{{ profile.id }} follow-btn">
+                {% if request.user not in profile.followers.all %}
+                    Follow
+                {% else %}
+                    Unfollow
+                {% endif %}
+            </button>
+        </form>
     {% endif %}
-
-    <br><br>
+    <br>
 
     <div class="total-followers">
         {% with total_followers=profile.followers.count %}
@@ -42,38 +31,16 @@
         {% endwith %}
     </div>
 
-    <form action="{% url 'users:follow_user_ajax' %}" method="POST" class="follow-form" id="{{ profile.id }}">
-        {% csrf_token %}
-        <input type="hidden" name="user_id" value="{{ profile.id }}" class="follow_id">
-        <button type="submit" class="follow-btn{{ profile.id }} follow-btn">
-            {% if request.user not in profile.followers.all %}
-                Follow
-            {% else %}
-                Unfollow
-            {% endif %}
-        </button>
-    </form>
-
-   <br>
-
-
-    {% with total_followers=profile.followers.count %}
-        ({{ total_followers }} Follower) <br>
-    {% endwith %}
-
-
     Following me:
     <br>
     {% for follower in profile.followers.all %}
         {{ follower.username }} <br>
     {% endfor %}
-
     <br><br>
 
     {% with total_followers=profile.following.count %}
         ({{ total_followers }} I follow)
     {% endwith %}
-
     <br>
 
     I follow:
@@ -94,10 +61,10 @@
                 e.preventDefault();
                 const csrf = $('input[name ="csrfmiddlewaretoken"]').val()
                 const user_id = $('.follow_id').val();
-                $.post('/users/ajax/followers/', {'user_id': user_id, 'csrfmiddlewaretoken': csrf}, function (data) {
+                $.post('/users/followers/', {'user_id': user_id, 'csrfmiddlewaretoken': csrf}, function (data) {
                     console.log(data);
-                    $('.total-followers').html(`followers: ${data.number}`)
-                    if ($('.follow-btn').html().trim() == 'Follow') {
+                    $('.total-followers').html(`(${data.followers_number} Follower)`)
+                    if ($('.follow-btn').html().trim() === 'Follow') {
                         $('.follow-btn').html('Unfollow');
                     } else {
                         $('.follow-btn').html('Follow');
