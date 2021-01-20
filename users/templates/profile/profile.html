@@ -1,54 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Pofile {{ profile.username }}</title>
-</head>
-<body>
-Username:
-<br>
-{{ profile.username }}
+{% extends 'web/base.html' %}
+{% load static %}
 
-<br><br>
+{% block title %} Pofile {{ profile.username }} {% endblock %}
 
-{% with total_followers=profile.followers.count %}
-    ({{ total_followers }} Follower {{ total_followers|pluralize:'s' }})
-{% endwith %}
+{% block body %}
 
-<br>
+    Username:
+    {{ profile.username }}
+    <br>
+    <br>
 
+    {% if  request.user.username != profile.username %}
+        <form action="{% url 'users:follow_user' %}" method="POST" class="follow-form" id="{{ profile.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ profile.id }}" class="follow_id">
+            <button type="submit" class="follow-btn{{ profile.id }} follow-btn">
+                {% if request.user not in profile.followers.all %}
+                    Follow
+                {% else %}
+                    Unfollow
+                {% endif %}
+            </button>
+        </form>
+    {% endif %}
+    <br>
 
+    <div class="total-followers">
+        {% with total_followers=profile.followers.count %}
+            ({{ total_followers }} Follower) <br>
+        {% endwith %}
+    </div>
 
-Following me:
-<br>
-{% for follower in profile.followers.all %}
-    {{ follower.username }} <br>
-{% endfor %}
+    Following me:
+    <br>
+    {% for follower in profile.followers.all %}
+        {{ follower.username }} <br>
+    {% endfor %}
+    <br><br>
 
-<br><br>
+    {% with total_followers=profile.following.count %}
+        ({{ total_followers }} I follow)
+    {% endwith %}
+    <br>
 
+    I follow:
+    <br>
+    {% for follower in profile.following.all %}
+        {{ follower.username }} <br>
+    {% endfor %}
+    <br><br>
 
+    Views:
+    {{ hitcount.total_hits }}
+{% endblock %}
 
-{% with total_followers=profile.following.count %}
-    ({{ total_followers }} I follow)
-{% endwith %}
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('.follow-form').submit(function (e) {
+                e.preventDefault();
+                const csrf = $('input[name ="csrfmiddlewaretoken"]').val()
+                const user_id = $('.follow_id').val();
+                $.post('/users/followers/', {'user_id': user_id, 'csrfmiddlewaretoken': csrf}, function (data) {
+                    console.log(data);
+                    $('.total-followers').html(`(${data.followers_number} Follower)`)
+                    if ($('.follow-btn').html().trim() === 'Follow') {
+                        $('.follow-btn').html('Unfollow');
+                    } else {
+                        $('.follow-btn').html('Follow');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
 
-<br>
-
-I follow:
-<br>
-{% for follower in profile.following.all %}
-    {{ follower.username }} <br>
-{% endfor %}
-
-<br><br>
-
-Views:
-{{ hitcount.total_hits }}
-
-
-
-
-
-</body>
-</html>

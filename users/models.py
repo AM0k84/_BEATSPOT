@@ -13,9 +13,9 @@ class UserFollowing(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
+        db_table = "users_userfollowing"
         constraints = [models.UniqueConstraint(fields=["following_from", "follow_to"], name="unique_followers")]
         ordering = ("-created",)
-
 
     def __str__(self):
         return f"FROM:{self.following_from} TO:{self.follow_to}"
