@@ -5,8 +5,6 @@
 
 {% block body %}
 
-
-
     Username:
     {{ profile.username }}
     <br>
@@ -30,16 +28,6 @@
     <br>
 
 
-
-
-
-
-
-
-
-
-
-
     {% if request.user not in profile.followers.all %}
         Ja ({{ request.user.username }}) nie subuje {{ profile.username }}
     {% else %}
@@ -48,24 +36,30 @@
 
     <br><br>
 
-    <form action="{% url 'users:follow_user' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="user_id" value="{{ profile.id }}">
+    <div class="total-followers">
+        {% with total_followers=profile.followers.count %}
+            ({{ total_followers }} Follower) <br>
+        {% endwith %}
+    </div>
 
-        {% if request.user in profile.followers.all %}
-            <button type="submit">UNFOLLOW</button>
-        {% else %}
-            <button type="submit">FOLLOW</button>
-        {% endif %}
+    <form action="{% url 'users:follow_user_ajax' %}" method="POST" class="follow-form" id="{{ profile.id }}">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ profile.id }}" class="follow_id">
+        <button type="submit" class="follow-btn{{ profile.id }} follow-btn">
+            {% if request.user not in profile.followers.all %}
+                Follow
+            {% else %}
+                Unfollow
+            {% endif %}
+        </button>
     </form>
 
-    <br>
+   <br>
+
 
     {% with total_followers=profile.followers.count %}
         ({{ total_followers }} Follower) <br>
     {% endwith %}
-
-
 
 
     Following me:
@@ -75,8 +69,6 @@
     {% endfor %}
 
     <br><br>
-
-
 
     {% with total_followers=profile.following.count %}
         ({{ total_followers }} I follow)
@@ -89,12 +81,30 @@
     {% for follower in profile.following.all %}
         {{ follower.username }} <br>
     {% endfor %}
-
     <br><br>
 
     Views:
     {{ hitcount.total_hits }}
+{% endblock %}
 
-
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('.follow-form').submit(function (e) {
+                e.preventDefault();
+                const csrf = $('input[name ="csrfmiddlewaretoken"]').val()
+                const user_id = $('.follow_id').val();
+                $.post('/users/ajax/followers/', {'user_id': user_id, 'csrfmiddlewaretoken': csrf}, function (data) {
+                    console.log(data);
+                    $('.total-followers').html(`followers: ${data.number}`)
+                    if ($('.follow-btn').html().trim() == 'Follow') {
+                        $('.follow-btn').html('Unfollow');
+                    } else {
+                        $('.follow-btn').html('Follow');
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
 
