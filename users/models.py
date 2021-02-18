@@ -32,8 +32,8 @@ class Profile(AbstractUser, HitCountMixin):
     slug = models.SlugField(null=False, unique=True)
     following = models.ManyToManyField("self", through=UserFollowing, related_name="followers",
                                        verbose_name=_("following"), symmetrical=False)
-    is_regular_profile = models.BooleanField(_("Is regular profile"), default=False)
-    is_provider_profile = models.BooleanField(_("Is provider profile"), default=False)
+    is_regular_profile = models.BooleanField(_("Is regular users"), default=False)
+    is_provider_profile = models.BooleanField(_("Is provider users"), default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -45,7 +45,7 @@ class Profile(AbstractUser, HitCountMixin):
     )
 
     class Meta:
-        verbose_name = _("profile")
+        verbose_name = _("users")
         verbose_name_plural = _("profiles")
         ordering = ("id",)
 
@@ -75,7 +75,7 @@ class ProviderCategory(models.Model):
 
 class ProviderProfile(models.Model):
     id = models.AutoField(primary_key=True)
-    user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user profile"))
+    user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user users"))
     provider_category = models.ForeignKey(ProviderCategory, on_delete=models.CASCADE, related_name='comments', verbose_name=_("provider category"))
     created_at = models.DateTimeField(_('created'), auto_now_add=True)
     edit_date = models.DateTimeField(_('editeded'), auto_now=True)
@@ -91,7 +91,7 @@ class ProviderProfile(models.Model):
     # kategorie: wykonawca, producent, wytwórnia, muzyk, woalista, itp.
 
     class Meta:
-        verbose_name = _("Provider profile")
+        verbose_name = _("Provider users")
         verbose_name_plural = _("Provider profiles")
         ordering = ("id",)
 
