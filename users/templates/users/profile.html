@@ -31,20 +31,26 @@
         {% endwith %}
     </div>
 
-    Following me:
+    Following me (Profile who following this user):
     <br>
+    <a href="{% url 'followers' slug=profile.slug  %}"> MY FOLLOWERS </a> <br>
+
     {% for follower in profile.followers.all %}
         {{ follower.username }} <br>
     {% endfor %}
     <br><br>
+
+
+
 
     {% with total_followers=profile.following.count %}
         ({{ total_followers }} I follow)
     {% endwith %}
     <br>
 
-    I follow:
-    <br>
+    I follow (Profile who this user follow): <br>
+    <a href="{% url 'followed' slug=profile.slug  %}"> I FOLLOWED </a> <br>
+
     {% for follower in profile.following.all %}
         {{ follower.username }} <br>
     {% endfor %}

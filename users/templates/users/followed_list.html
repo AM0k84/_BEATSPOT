@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+ALL USERS WHO THIS USER FOLLOW <br>
+{% for follow in object_list %}
+    <a href="{% url 'user_profile' follow.follow_to.slug %}">{{ follow.follow_to.slug  }} </a><br>
+     <br>
+{% endfor %}
+</body>
+</html>
+</body>
+</html>
