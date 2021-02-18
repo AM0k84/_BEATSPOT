@@ -8,8 +8,10 @@ from hitcount.settings import MODEL_HITCOUNT
 
 
 class UserFollowing(models.Model):
-    following_from = models.ForeignKey("Profile", related_name="following_from", on_delete=models.CASCADE)
-    follow_to = models.ForeignKey("Profile", related_name="follow_to", on_delete=models.CASCADE)
+    following_from = models.ForeignKey("Profile", related_name="following_from", on_delete=models.CASCADE,
+                                       verbose_name=_("Following from"))
+    follow_to = models.ForeignKey("Profile", related_name="follow_to", on_delete=models.CASCADE,
+                                  verbose_name=_("Following to"))
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
@@ -22,17 +24,16 @@ class UserFollowing(models.Model):
 
 
 class Profile(AbstractUser, HitCountMixin):
-    edit_date = models.DateTimeField(auto_now=True)
-    profile_photo = models.ImageField(blank=True, null=True, upload_to="profile_photos")
-    info = models.TextField(max_length=350, blank=True, null=True)
-    localization = models.CharField(max_length=40, null=True, blank=True)
-    facebook_url = models.URLField(max_length=500, blank=True, null=True)
-    soundcloud_url = models.URLField(max_length=500, blank=True, null=True)
-    youtube_url = models.URLField(max_length=500, blank=True, null=True)
-    instagram_url = models.URLField(max_length=500, blank=True, null=True)
-    website_url = models.URLField(max_length=500, blank=True, null=True)
+    edit_date = models.DateTimeField(_("edited"), auto_now=True)
+    profile_photo = models.ImageField(_("avatar"), blank=True, null=True, upload_to="profile_photos")
+    short_info = models.TextField(_("short info"), max_length=350, blank=True, null=True)
+    localization = models.CharField(_("localization"), max_length=40, null=True,
+                                    blank=True)  # todo: change to smth cool!
     slug = models.SlugField(null=False, unique=True)
-    following = models.ManyToManyField("self", through=UserFollowing, related_name="followers", symmetrical=False)
+    following = models.ManyToManyField("self", through=UserFollowing, related_name="followers",
+                                       verbose_name=_("following"), symmetrical=False)
+    is_regular_profile = models.BooleanField(_("Is regular profile"), default=False)
+    is_provider_profile = models.BooleanField(_("Is provider profile"), default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -50,3 +51,49 @@ class Profile(AbstractUser, HitCountMixin):
 
     def __str__(self):
         return self.username
+
+
+class ProviderCategory(models.Model):
+    category_name = models.CharField(_('category name'), max_length=128)
+    created_on = models.DateTimeField(_("created"), auto_now_add=True, null=True)
+    edit_date = models.DateTimeField(_("edited"), auto_now=True)
+    slug = models.SlugField(null=False, unique=False)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.category_name)
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = _("Provider category")
+        verbose_name_plural = _("Provider categories")
+        ordering = ("id",)
+
+    def __str__(self):
+        return self.category_name
+
+
+class ProviderProfile(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user profile"))
+    provider_category = models.ForeignKey(ProviderCategory, on_delete=models.CASCADE, related_name='comments', verbose_name=_("provider category"))
+    created_at = models.DateTimeField(_('created'), auto_now_add=True)
+    edit_date = models.DateTimeField(_('editeded'), auto_now=True)
+    is_promoted = models.BooleanField(_('is promoted'), default=False)
+    background_image = models.ImageField(_('background image'), blank=True, null=True, upload_to="background_image")
+    facebook_url = models.URLField(max_length=500, blank=True, null=True)
+    soundcloud_url = models.URLField(max_length=500, blank=True, null=True)
+    youtube_url = models.URLField(max_length=500, blank=True, null=True)
+    instagram_url = models.URLField(max_length=500, blank=True, null=True)
+    website_url = models.URLField(max_length=500, blank=True, null=True)
+
+    # long_description = HTMLField(_("long description"), max_length=3000, blank=True, null=True)
+    # kategorie: wykonawca, producent, wytwórnia, muzyk, woalista, itp.
+
+    class Meta:
+        verbose_name = _("Provider profile")
+        verbose_name_plural = _("Provider profiles")
+        ordering = ("id",)
+
+    def __str__(self):
+        return self.user_profile.username
