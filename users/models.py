@@ -24,13 +24,8 @@ class UserFollowing(models.Model):
 class Profile(AbstractUser, HitCountMixin):
     edit_date = models.DateTimeField(auto_now=True)
     profile_photo = models.ImageField(blank=True, null=True, upload_to="profile_photos")
-    info = models.TextField(max_length=350, blank=True, null=True)
-    localization = models.CharField(max_length=40, null=True, blank=True)
-    facebook_url = models.URLField(max_length=500, blank=True, null=True)
-    soundcloud_url = models.URLField(max_length=500, blank=True, null=True)
-    youtube_url = models.URLField(max_length=500, blank=True, null=True)
-    instagram_url = models.URLField(max_length=500, blank=True, null=True)
-    website_url = models.URLField(max_length=500, blank=True, null=True)
+    short_info = models.TextField(max_length=350, blank=True, null=True)
+    localization = models.CharField(max_length=40, null=True, blank=True) #todo: change to smth cool!
     slug = models.SlugField(null=False, unique=True)
     following = models.ManyToManyField("self", through=UserFollowing, related_name="followers", symmetrical=False)
 
@@ -50,3 +45,17 @@ class Profile(AbstractUser, HitCountMixin):
 
     def __str__(self):
         return self.username
+
+
+class ProviderProfile(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user profile"))
+    background_image = models.ImageField(blank=True, null=True, upload_to="background_image")
+    facebook_url = models.URLField(max_length=500, blank=True, null=True)
+    soundcloud_url = models.URLField(max_length=500, blank=True, null=True)
+    youtube_url = models.URLField(max_length=500, blank=True, null=True)
+    instagram_url = models.URLField(max_length=500, blank=True, null=True)
+    website_url = models.URLField(max_length=500, blank=True, null=True)
+    # long_description = HTMLField(_("long description"), max_length=3000, blank=True, null=True)
+    # kategorie: wykonawca, producent, wytwórnia, muzyk, woalista, itp.
+
