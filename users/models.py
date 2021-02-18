@@ -28,6 +28,8 @@ class Profile(AbstractUser, HitCountMixin):
     localization = models.CharField(max_length=40, null=True, blank=True) #todo: change to smth cool!
     slug = models.SlugField(null=False, unique=True)
     following = models.ManyToManyField("self", through=UserFollowing, related_name="followers", symmetrical=False)
+    is_regular_profile = models.BooleanField(_("Is regular profile"), default=False)
+    is_provider_profile = models.BooleanField(_("Is provider profile"), default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -50,6 +52,7 @@ class Profile(AbstractUser, HitCountMixin):
 class ProviderProfile(models.Model):
     id = models.AutoField(primary_key=True)
     user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user profile"))
+    created_at = models.DateTimeField(auto_now_add=True)
     background_image = models.ImageField(blank=True, null=True, upload_to="background_image")
     facebook_url = models.URLField(max_length=500, blank=True, null=True)
     soundcloud_url = models.URLField(max_length=500, blank=True, null=True)
@@ -58,4 +61,12 @@ class ProviderProfile(models.Model):
     website_url = models.URLField(max_length=500, blank=True, null=True)
     # long_description = HTMLField(_("long description"), max_length=3000, blank=True, null=True)
     # kategorie: wykonawca, producent, wytwórnia, muzyk, woalista, itp.
+
+    class Meta:
+        verbose_name = _("Provider profile")
+        verbose_name_plural = _("Provider profiles")
+        ordering = ("id",)
+
+    def __str__(self):
+        return self.user_profile.username
 

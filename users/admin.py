@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
-from .models import Profile, UserFollowing
+from .models import Profile, UserFollowing, ProviderProfile
 
 
 class FollowsToInLine(TabularInlinePaginated):
@@ -40,5 +40,24 @@ class ProfileAdmin(admin.ModelAdmin):
     )
     prepopulated_fields = {"slug": ("username",)}
     search_fields = ("username", "email")
-    list_filter = ("date_joined",)
+    list_filter = ("date_joined", 'is_active',)
     list_per_page = 50
+
+
+@admin.register(ProviderProfile)
+class ProviderProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user_profile",
+        'created_at',
+    )
+    search_fields = (
+        "user_profile__username",
+        "user_profile__email",
+    )
+    list_filter = (
+        "user_profile__date_joined",
+        "user_profile__is_active",
+    )
+
+    list_per_page = 10
