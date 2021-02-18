@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from hitcount.views import HitCountDetailView
 from django.views.generic import ListView
-from django.conf import settings
+
 
 from users.models import Profile, UserFollowing
 

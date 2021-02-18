@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title></title>
 </head>
 <body>
-All users who I follow<br>
+ALL USERS WHO THIS USER FOLLOW <br>
 {% for follow in object_list %}
-    {{ follow.follow_to.username  }} <br>
+    <a href="{% url 'user_profile' follow.follow_to.slug %}">{{ follow.follow_to.slug  }} </a><br>
+     <br>
 {% endfor %}
 </body>
 </html>
