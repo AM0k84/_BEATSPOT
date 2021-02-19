@@ -27,6 +27,7 @@ urlpatterns = [
     path("<slug:slug>/followers", Followers.as_view(), name="followers"),
     path("<slug:slug>/followed", Followed.as_view(), name="followed"),
     path("posts/", include("posts.urls")),
+    path("beats/", include("beats.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

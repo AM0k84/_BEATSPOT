@@ -1,0 +1,17 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load embed_video_tags %}
+
+{% block title %}ALL BEATS{% endblock %}
+
+{% block body %}
+{% if object_list %}
+
+    {% for beats in object_list %}
+
+        {% video beats.video_link 'small' %} <br>
+
+
+    {% endfor %}
+{% endif %}
+{% endblock %}
