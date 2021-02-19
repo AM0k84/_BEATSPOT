@@ -38,6 +38,8 @@ class ProfileAdmin(admin.ModelAdmin):
         "date_joined",
         'edit_date',
         "is_active",
+        'num_followers',
+        'num_followed',
     )
     prepopulated_fields = {"slug": ("username",)}
     search_fields = ("username", "email")

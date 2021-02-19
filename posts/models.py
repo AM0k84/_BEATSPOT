@@ -13,7 +13,7 @@ class Created(models.Model):
 
 class Post(Created):
     title = models.CharField(max_length=120)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="author")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="post_author")
     is_promoted = models.BooleanField(default=False)
     slug = models.SlugField(null=False, unique=False)
 
