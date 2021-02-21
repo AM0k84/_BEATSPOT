@@ -1,10 +1,12 @@
 from django.contrib import admin
 from beats.models import Beat, BeatCategory, BeatLike
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 
-class BeatLikesInLine(admin.TabularInline):
+class BeatLikesInLine(TabularInlinePaginated):
     model = BeatLike
     extra = 1
+    per_page = 1
     # fk_name = "like_to"
 
 
