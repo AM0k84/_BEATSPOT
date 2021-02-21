@@ -1,12 +1,14 @@
-from django.views.generic import ListView
+from django.views.generic import DetailView
+from django.urls import reverse_lazy
 
 from beats.models import Beat
 
 
-class AllBeatsList(ListView):
+class BeatDetailView(DetailView):
     model = Beat
-    template_name = "beats/all_beats_list.html"
-    paginate_by = 5
-    # context_object_name = "all_posts"
-    queryset = Beat.objects.order_by('-pk')
-    ordering = ("-pk",)
+    template_name = 'beats/beat_detail.html'
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        slug = self.kwargs['slug']
+        return reverse_lazy('beats:beat_detail', kwargs={'pk': pk, 'slug': slug})

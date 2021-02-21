@@ -1,9 +1,9 @@
 from django.urls import path
 
-from beats.views import AllBeatsList
+from beats.views import BeatDetailView
 
 app_name = "beats"
 
 urlpatterns = [
-    path("all/", AllBeatsList.as_view(), name="all_beats_list"),
+    path('<int:pk>/<slug:slug>', BeatDetailView.as_view(), name='beat_detail'),
 ]

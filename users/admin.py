@@ -44,14 +44,15 @@ class ProfileAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("username",)}
     search_fields = ("username", "email")
     list_filter = ("date_joined", 'is_active',)
-    list_per_page = 50
+    list_per_page = 10
+
 
 @admin.register(ProviderCategory)
 class ProviderCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'category_name', 'created_on', 'slug')
     prepopulated_fields = {'slug': ('category_name',)}
-    search_fields = ('category_name', )
-    list_filter = ('created_on', )
+    search_fields = ('category_name',)
+    list_filter = ('created_on',)
 
 
 @admin.register(ProviderProfile)
@@ -72,5 +73,4 @@ class ProviderProfileAdmin(admin.ModelAdmin):
         "user_profile__date_joined",
         "user_profile__is_active",
     )
-
     list_per_page = 10

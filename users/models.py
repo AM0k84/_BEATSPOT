@@ -35,6 +35,7 @@ class Profile(AbstractUser, HitCountMixin):
     is_regular_profile = models.BooleanField(_("Is regular users"), default=False)
     is_provider_profile = models.BooleanField(_("Is provider users"), default=False)
 
+
     @property
     def num_followers(self):
         return self.followers.all().count()
@@ -94,6 +95,7 @@ class ProviderProfile(models.Model):
     youtube_url = models.URLField(max_length=500, blank=True, null=True)
     instagram_url = models.URLField(max_length=500, blank=True, null=True)
     website_url = models.URLField(max_length=500, blank=True, null=True)
+    is_verify = models.BooleanField(_("Is verify"), default=False)
 
     # long_description = HTMLField(_("long description"), max_length=3000, blank=True, null=True)
     # kategorie: wykonawca, producent, wytwórnia, muzyk, woalista, itp.

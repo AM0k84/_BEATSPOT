@@ -1,13 +1,14 @@
 {% extends 'web/base.html' %}
 {% load static %}
 
-{% block title %} Pofile {{ profile.username }} {% endblock %}
+{% block title %} PROFILE {{ profile.username }} {% endblock %}
 
 {% block body %}
 
+    Profile <br>
+
     Username:
     {{ profile.username }}
-    <br>
     <br>
 
     {% if  request.user.username != profile.username %}
@@ -23,33 +24,26 @@
             </button>
         </form>
     {% endif %}
-    <br>
 
-    <div class="total-followers">
-        {% with total_followers=profile.followers.count %}
-            ({{ total_followers }} Follower) <br>
-        {% endwith %}
-    </div>
+    <a href="{% url 'followers' slug=profile.slug %}">
+        <div class="total-followers">
+            {% with total_followers=profile.followers.count %}
+                Obserwujących ({{ total_followers }})<br>
+            {% endwith %}
+        </div>
+    </a> - użytkownicy którzy obserwują tego usera<br>
 
-    Following me (Profile who following this user):
-    <br>
-    <a href="{% url 'followers' slug=profile.slug  %}"> MY FOLLOWERS </a> <br>
+
 
     {% for follower in profile.followers.all %}
         {{ follower.username }} <br>
     {% endfor %}
-    <br><br>
 
-
-
-
-    {% with total_followers=profile.following.count %}
-        ({{ total_followers }} I follow)
-    {% endwith %}
     <br>
 
-    I follow (Profile who this user follow): <br>
-    <a href="{% url 'followed' slug=profile.slug  %}"> I FOLLOWED </a> <br>
+    <a href="{% url 'followed' slug=profile.slug %}"> {% with total_followers=profile.following.count %}
+        Obserwuje ({{ total_followers }})
+    {% endwith %} </a> <br>- użytkoniwcy śledzeni przez tego użytkownika <br>
 
     {% for follower in profile.following.all %}
         {{ follower.username }} <br>
@@ -69,7 +63,7 @@
                 const user_id = $('.follow_id').val();
                 $.post('/users/followers/', {'user_id': user_id, 'csrfmiddlewaretoken': csrf}, function (data) {
                     console.log(data);
-                    $('.total-followers').html(`(${data.followers_number} Follower)`)
+                    $('.total-followers').html(`Obserwujących (${data.followers_number})`)
                     if ($('.follow-btn').html().trim() === 'Follow') {
                         $('.follow-btn').html('Unfollow');
                     } else {

@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from hitcount.views import HitCountDetailView
 from django.views.generic import ListView
 
-
 from users.models import Profile, UserFollowing
 
 
@@ -24,8 +23,8 @@ def follow_user(request):
     return JsonResponse({"status": "ok", "followers_number": user_obj.followers.count()})
 
 
-class Followers(ListView):
-    """All users who follow me"""
+class FollowersList(ListView):
+    """All users who follow User"""
     template_name = 'users/followers_list.html'
     model = Profile
 
@@ -34,7 +33,7 @@ class Followers(ListView):
         return queryset
 
 
-class Followed(ListView):
+class FollowedList(ListView):
     """All users who User follow"""
     template_name = 'users/followed_list.html'
     model = Profile

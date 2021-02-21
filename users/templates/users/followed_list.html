@@ -2,10 +2,20 @@
 {% load static %}
 
 {% block body %}
-ALL USERS WHO THIS USER FOLLOW <br>
-{% for follow in object_list %}
-    <a href="{% url 'user_profile' follow.follow_to.slug %}">{{ follow.follow_to.slug  }} </a><br>
-{% endfor %}
+    Wszyscy użytkownicy których obserwuje [NAZWA UŻYTKOWNIKA]<br><br>
+
+    {% for followed in object_list %}
+        <a href="{% url 'user_profile' followed.follow_to.slug %}">{{ followed.follow_to.username }} </a><br>
+
+        {{ followed.follow_to.username }} id: {{ followed.follow_to.id }} <br>
+        Liczba followersów {{ followed.follow_to.username }}:
+        {% with total_followers=followed.follow_to.followers.count %}
+            ({{ total_followers }} Followers)
+        {% endwith %} <br>
+
+        Mój ID: {{ request.user.id }} <br><br>
+
+    {% endfor %}
 {% endblock %}
 
 

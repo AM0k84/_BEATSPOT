@@ -18,14 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from users.views import ProfileDetailView, Followed, Followers
+from users.views import ProfileDetailView, FollowedList, FollowersList
 
 urlpatterns = [
     path("admin/admin", admin.site.urls),
     path("users/", include("users.urls")),
     path("<slug:slug>", ProfileDetailView.as_view(), name="user_profile"),
-    path("<slug:slug>/followers", Followers.as_view(), name="followers"),
-    path("<slug:slug>/followed", Followed.as_view(), name="followed"),
+    path("<slug:slug>/followers", FollowersList.as_view(), name="followers"),
+    path("<slug:slug>/followed", FollowedList.as_view(), name="followed"),
     path("posts/", include("posts.urls")),
     path("beats/", include("beats.urls")),
 ]
