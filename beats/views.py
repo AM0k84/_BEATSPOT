@@ -1,9 +1,7 @@
 from django.views.generic import DetailView
 from django.urls import reverse_lazy
 from django.http import JsonResponse
-
-
-from beats.models import Beat
+from beats.models import Beat, BeatLike
 
 
 class BeatDetailView(DetailView):
@@ -22,7 +20,7 @@ def like_beat(request):
         beat_id = request.POST.get("beat_id")
         beat_obj = Beat.objects.get(id=beat_id)
         if user not in beat_obj.likes.all():
-            beat_obj.likes.add(user)
+            BeatLike.objects.get_or_create(like_from=user, like_to=beat_obj)
         else:
-            beat_obj.likes.remove(user)
+            BeatLike.objects.filter(like_from=user, like_to=beat_obj).delete()
     return JsonResponse({"status": "ok", "likes_number": beat_obj.likes.count()})

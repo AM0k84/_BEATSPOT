@@ -40,7 +40,11 @@ class Beat(Base):
     slug = models.SlugField(null=False, unique=False)
     is_promoted = models.BooleanField(default=False)
     price = models.SmallIntegerField(null=True, blank=True)
-    likes = models.ManyToManyField(Profile, default=None, blank=True, related_name='likes')
+    likes = models.ManyToManyField(Profile, related_name='likes', through='BeatLike', blank=True, default=None)
+
+    @property
+    def num_likes(self):
+        return self.likes.all().count()
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -56,3 +60,15 @@ class Beat(Base):
         return self.beat_title
 
 
+class BeatLike(models.Model):
+    like_from = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='like_from')
+    like_to = models.ForeignKey(Beat, on_delete=models.CASCADE, related_name='like_to')
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        db_table = "beats_beatlike"
+        constraints = [models.UniqueConstraint(fields=["like_from", "like_to"], name="unique_likes")]
+        ordering = ("-created",)
+
+    def __str__(self):
+        return f'{self.like_from} lubi {self.like_to}'

@@ -1,6 +1,18 @@
 from django.contrib import admin
+from beats.models import Beat, BeatCategory, BeatLike
 
-from beats.models import Beat, BeatCategory
+
+class BeatLikesInLine(admin.TabularInline):
+    model = BeatLike
+    extra = 1
+    # fk_name = "like_to"
+
+
+@admin.register(BeatLike)
+class BeatLikeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'like_from', 'like_to', 'created',)
+    search_fields = ('like_from', 'like_to',)
+    readonly_fields = ("created",)
 
 
 @admin.register(BeatCategory)
@@ -15,7 +27,8 @@ class BeatCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Beat)
 class BeatAdmin(admin.ModelAdmin):
-    list_display = ('id', 'beat_title', 'beat_link', 'is_promoted',)
+    inlines = [BeatLikesInLine, ]
+    list_display = ('id', 'beat_title', 'beat_link', 'is_promoted', 'num_likes',)
     prepopulated_fields = {"slug": ("beat_title",)}
     search_fields = ("beat_title",)
     list_filter = ('created_on',)
