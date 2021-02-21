@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "users",
     "posts",
     "web",
+    'beats',
+    'embed_video',
 ]
 
 MIDDLEWARE = [

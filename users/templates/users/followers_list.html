@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block body %}
 
 ALL FOLLOWERS OF THIS USER  <br>
 
@@ -12,6 +9,4 @@ ALL FOLLOWERS OF THIS USER  <br>
     <a href="{% url 'user_profile' follow.following_from.slug %}">{{ follow.following_from.slug  }} </a><br>
 
 {% endfor %}
-
-</body>
-</html>
+{% endblock %}

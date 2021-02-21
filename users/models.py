@@ -35,6 +35,14 @@ class Profile(AbstractUser, HitCountMixin):
     is_regular_profile = models.BooleanField(_("Is regular users"), default=False)
     is_provider_profile = models.BooleanField(_("Is provider users"), default=False)
 
+    @property
+    def num_followers(self):
+        return self.followers.all().count()
+
+    @property
+    def num_followed(self):
+        return self.following.all().count()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.username)
@@ -76,7 +84,7 @@ class ProviderCategory(models.Model):
 class ProviderProfile(models.Model):
     id = models.AutoField(primary_key=True)
     user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user users"))
-    provider_category = models.ForeignKey(ProviderCategory, on_delete=models.CASCADE, related_name='comments', verbose_name=_("provider category"))
+    provider_category = models.ForeignKey(ProviderCategory, on_delete=models.CASCADE, related_name='categories', verbose_name=_("provider category"))
     created_at = models.DateTimeField(_('created'), auto_now_add=True)
     edit_date = models.DateTimeField(_('editeded'), auto_now=True)
     is_promoted = models.BooleanField(_('is promoted'), default=False)
