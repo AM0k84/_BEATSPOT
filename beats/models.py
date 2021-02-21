@@ -30,38 +30,17 @@ class BeatCategory(Base):
         return self.category_name
 
 
-class BeatLike(Base):
-    like_from = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='like_from', verbose_name=_("like from"))
-    like_to = models.ForeignKey('Beat', on_delete=models.CASCADE, related_name='like_to', verbose_name=_("like to"))
-
-    class Meta:
-        db_table = "beats_beatlike"
-        constraints = [models.UniqueConstraint(fields=["like_from", "like_to"], name="unique_beatlike")]
-        verbose_name = _("Beat like")
-        verbose_name_plural = _("Beat likes")
-        ordering = ("-created_on",)
-
-
-    def __str__(self):
-        return f'LIKE FROM:{self.like_from} LIKE TO: {self.like_to}'
-
-
 class Beat(Base):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='beat_author')
+
     beat_title = models.CharField(_("beat title"), max_length=120)
     beat_link = EmbedVideoField(_("beat link"), blank=False, null=False)
     beat_category = models.ForeignKey(BeatCategory, on_delete=models.CASCADE, related_name='categories',
                                       verbose_name=_("beat category"))
-    likes = models.ManyToManyField('self', through=BeatLike, related_name='beat_likes', verbose_name=_("likes"), symmetrical=False, blank=True)
     slug = models.SlugField(null=False, unique=False)
     is_promoted = models.BooleanField(default=False)
     price = models.SmallIntegerField(null=True, blank=True)
-
-    # todo: add price
-
-    @property
-    def num_likes(self):
-        return self.like_to.count()
+    likes = models.ManyToManyField(Profile, default=None, blank=True, related_name='likes')
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -75,3 +54,5 @@ class Beat(Base):
 
     def __str__(self):
         return self.beat_title
+
+

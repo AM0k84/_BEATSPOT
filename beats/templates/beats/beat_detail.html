@@ -1,12 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'web/base.html' %}
+{% load static %}
 
-{{ beat.beat_title }}
+{% block title %} BEAT: {{ beat.beat_title }} {% endblock %}
 
-</body>
-</html>
+{% block body %}
+
+    {{ beat.beat_title }}<br>
+
+    {{ beat.likes.count }}
+
+
+    <form action="{% url 'beats:like_beat' %}" method="POST" class="follow-form" >
+            {% csrf_token %}
+            <input type="hidden" name="beat_id" value="{{ beat.id }}" class="follow_id">
+            <button type="submit" class="follow-btn{{ beat.id }} follow-btn">
+                {% if request.user not in beat.likes.all %}
+                    Like
+                {% else %}
+                    UnfLike
+                {% endif %}
+            </button>
+        </form>
+
+{% endblock %}
