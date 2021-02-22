@@ -6,11 +6,33 @@
 
 {% block body %}
     {% if object_list %}
+
         <div class="infinite-container">
             <div class="infinite-item">
+
                 {% for beats in all_beats %}
                     {{ beats.beat_title }} <br>
-                    {% video beats.beat_link 'small' %} <br><br>
+                    {% video beats.beat_link 'small' %}
+
+                    <div class="total-likes">
+                        {% with total_likes=beats.likes.count %}
+                            Polubień ({{ total_likes }})<br>
+                        {% endwith %}
+                    </div>
+
+                    <form action="{% url 'beats:like_beat' %}" method="POST" class="like-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="beat_id" value="{{ beats.id }}" class="like_id">
+                        <button type="submit" class="like-btn{{ beats.id }} like-btn">
+                            {% if request.user not in beats.likes.all %}
+                                Like
+                            {% else %}
+                                UnLike
+                            {% endif %}
+                        </button>
+                    </form>
+                    <br><br>
+
                 {% endfor %}
             </div>
         </div>
@@ -48,5 +70,7 @@
             }
 
         });
+
+
     </script>
 {% endblock %}

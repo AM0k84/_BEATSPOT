@@ -49,6 +49,7 @@ class Beat(Base):
     likes = models.ManyToManyField(
         Profile, related_name="likes", through="BeatLike", blank=True, default=None, verbose_name=_("Likes")
     )
+    #todo: add short beat description field
 
     @property
     def num_likes(self):
