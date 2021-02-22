@@ -8,10 +8,12 @@ from hitcount.settings import MODEL_HITCOUNT
 
 
 class UserFollowing(models.Model):
-    following_from = models.ForeignKey("Profile", related_name="following_from", on_delete=models.CASCADE,
-                                       verbose_name=_("Following from"))
-    follow_to = models.ForeignKey("Profile", related_name="follow_to", on_delete=models.CASCADE,
-                                  verbose_name=_("Following to"))
+    following_from = models.ForeignKey(
+        "Profile", related_name="following_from", on_delete=models.CASCADE, verbose_name=_("Following from")
+    )
+    follow_to = models.ForeignKey(
+        "Profile", related_name="follow_to", on_delete=models.CASCADE, verbose_name=_("Following to")
+    )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
@@ -27,14 +29,15 @@ class Profile(AbstractUser, HitCountMixin):
     edit_date = models.DateTimeField(_("edited"), auto_now=True)
     profile_photo = models.ImageField(_("avatar"), blank=True, null=True, upload_to="profile_photos")
     short_info = models.TextField(_("short info"), max_length=350, blank=True, null=True)
-    localization = models.CharField(_("localization"), max_length=40, null=True,
-                                    blank=True)  # todo: change to smth cool!
+    localization = models.CharField(
+        _("localization"), max_length=40, null=True, blank=True
+    )  # todo: change to smth cool!
     slug = models.SlugField(null=False, unique=True)
-    following = models.ManyToManyField("self", through=UserFollowing, related_name="followers",
-                                       verbose_name=_("following"), symmetrical=False)
+    following = models.ManyToManyField(
+        "self", through=UserFollowing, related_name="followers", verbose_name=_("following"), symmetrical=False
+    )
     is_regular_profile = models.BooleanField(_("Is regular users"), default=False)
     is_provider_profile = models.BooleanField(_("Is provider users"), default=False)
-
 
     @property
     def num_followers(self):
@@ -63,7 +66,7 @@ class Profile(AbstractUser, HitCountMixin):
 
 
 class ProviderCategory(models.Model):
-    category_name = models.CharField(_('category name'), max_length=128)
+    category_name = models.CharField(_("category name"), max_length=128)
     created_on = models.DateTimeField(_("created"), auto_now_add=True, null=True)
     edit_date = models.DateTimeField(_("edited"), auto_now=True)
     slug = models.SlugField(null=False, unique=False)
@@ -85,11 +88,13 @@ class ProviderCategory(models.Model):
 class ProviderProfile(models.Model):
     id = models.AutoField(primary_key=True)
     user_profile = models.OneToOneField(Profile, on_delete=models.SET_NULL, null=True, verbose_name=_("user users"))
-    provider_category = models.ForeignKey(ProviderCategory, on_delete=models.CASCADE, related_name='categories', verbose_name=_("provider category"))
-    created_at = models.DateTimeField(_('created'), auto_now_add=True)
-    edit_date = models.DateTimeField(_('editeded'), auto_now=True)
-    is_promoted = models.BooleanField(_('is promoted'), default=False)
-    background_image = models.ImageField(_('background image'), blank=True, null=True, upload_to="background_image")
+    provider_category = models.ForeignKey(
+        ProviderCategory, on_delete=models.CASCADE, related_name="categories", verbose_name=_("provider category")
+    )
+    created_at = models.DateTimeField(_("created"), auto_now_add=True)
+    edit_date = models.DateTimeField(_("editeded"), auto_now=True)
+    is_promoted = models.BooleanField(_("is promoted"), default=False)
+    background_image = models.ImageField(_("background image"), blank=True, null=True, upload_to="background_image")
     facebook_url = models.URLField(max_length=500, blank=True, null=True)
     soundcloud_url = models.URLField(max_length=500, blank=True, null=True)
     youtube_url = models.URLField(max_length=500, blank=True, null=True)

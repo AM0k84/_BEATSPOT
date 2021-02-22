@@ -1,8 +1,8 @@
-from django.db import models
-from embed_video.fields import EmbedVideoField
-from django.utils.translation import gettext_lazy as _
-from django.template.defaultfilters import slugify
 from django.conf import settings
+from django.db import models
+from django.template.defaultfilters import slugify
+from django.utils.translation import gettext_lazy as _
+from embed_video.fields import EmbedVideoField
 
 from users.models import Profile
 
@@ -13,7 +13,7 @@ class Base(models.Model):
 
 
 class BeatCategory(Base):
-    category_name = models.CharField(_('category name'), max_length=128)
+    category_name = models.CharField(_("category name"), max_length=128)
     slug = models.SlugField(null=False, unique=False)
 
     def save(self, *args, **kwargs):
@@ -31,16 +31,21 @@ class BeatCategory(Base):
 
 
 class Beat(Base):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='beat_author')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="beat_author", verbose_name=_("Author")
+    )
 
     beat_title = models.CharField(_("beat title"), max_length=120)
     beat_link = EmbedVideoField(_("beat link"), blank=False, null=False)
-    beat_category = models.ForeignKey(BeatCategory, on_delete=models.CASCADE, related_name='categories',
-                                      verbose_name=_("beat category"))
+    beat_category = models.ForeignKey(
+        BeatCategory, on_delete=models.CASCADE, related_name="categories", verbose_name=_("beat category")
+    )
     slug = models.SlugField(null=False, unique=False)
-    is_promoted = models.BooleanField(default=False)
-    price = models.SmallIntegerField(null=True, blank=True)
-    likes = models.ManyToManyField(Profile, related_name='likes', through='BeatLike', blank=True, default=None)
+    is_promoted = models.BooleanField(_("Id promoted"), default=False)
+    price = models.SmallIntegerField(_("Price"), null=True, blank=True)
+    likes = models.ManyToManyField(
+        Profile, related_name="likes", through="BeatLike", blank=True, default=None, verbose_name=_("Likes")
+    )
 
     @property
     def num_likes(self):
@@ -61,9 +66,11 @@ class Beat(Base):
 
 
 class BeatLike(models.Model):
-    like_from = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='like_from')
-    like_to = models.ForeignKey(Beat, on_delete=models.CASCADE, related_name='like_to')
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    like_from = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="like_from", verbose_name=_("Like from")
+    )
+    like_to = models.ForeignKey(Beat, on_delete=models.CASCADE, related_name="like_to", verbose_name=_("Like to"))
+    created = models.DateTimeField(_("created"), auto_now_add=True, db_index=True)
 
     class Meta:
         db_table = "beats_beatlike"
@@ -71,4 +78,4 @@ class BeatLike(models.Model):
         ordering = ("-created",)
 
     def __str__(self):
-        return f'{self.like_from} lubi {self.like_to}'
+        return f"{self.like_from} lubi {self.like_to}"

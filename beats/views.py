@@ -1,17 +1,18 @@
-from django.views.generic import DetailView
-from django.urls import reverse_lazy
 from django.http import JsonResponse
+from django.urls import reverse_lazy
+from django.views.generic import DetailView
+
 from beats.models import Beat, BeatLike
 
 
 class BeatDetailView(DetailView):
     model = Beat
-    template_name = 'beats/beat_detail.html'
+    template_name = "beats/beat_detail.html"
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
-        slug = self.kwargs['slug']
-        return reverse_lazy('beats:beat_detail', kwargs={'pk': pk, 'slug': slug})
+        slug = self.kwargs["slug"]
+        return reverse_lazy("beats:beat_detail", kwargs={"pk": pk, "slug": slug})
 
 
 def like_beat(request):

@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from users.views import ProfileDetailView, FollowedList, FollowersList
+from users.views import FollowedList, FollowersList, ProfileDetailView
 
 urlpatterns = [
     path("admin/admin", admin.site.urls),
