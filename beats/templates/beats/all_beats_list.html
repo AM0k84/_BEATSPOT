@@ -5,13 +5,13 @@
 {% block title %}ALL BEATS{% endblock %}
 
 {% block body %}
-{% if object_list %}
+    {% if object_list %}
 
-    {% for beats in object_list %}
+        {% for beats in object_list %}
 
-        {% video beats.beat_link 'small' %} <br>
+            {% video beats.beat_link 'small' %} <br>
 
 
-    {% endfor %}
-{% endif %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

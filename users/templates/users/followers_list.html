@@ -3,10 +3,10 @@
 
 {% block body %}
 
-ALL FOLLOWERS OF THIS USER  <br>
+    Wszyscy obserwujący użytkownika [NAZWA UŻYTKOWNIKA]  <br>
 
-{% for follow in object_list %}
-    <a href="{% url 'user_profile' follow.following_from.slug %}">{{ follow.following_from.slug  }} </a><br>
+    {% for follow in object_list %}
+        <a href="{% url 'user_profile' follow.following_from.slug %}">{{ follow.following_from.username }} </a><br>
 
-{% endfor %}
+    {% endfor %}
 {% endblock %}
