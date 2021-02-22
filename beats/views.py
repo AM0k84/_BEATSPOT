@@ -29,6 +29,7 @@ class BeatDetailView(DetailView):
 
 # todo: this will be waiting room for beats like 'wykopalisko'
 class AllBeatsList(ListView):
+    """All Beats List - all beats added by users. From newest to oldest."""
     model = Beat
     template_name = 'beats/all_beats_list.html'
     context_object_name = 'all_beats'

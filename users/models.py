@@ -102,8 +102,8 @@ class ProviderProfile(models.Model):
     website_url = models.URLField(max_length=500, blank=True, null=True)
     is_verify = models.BooleanField(_("Is verify"), default=False)
 
+    # todo: add long description - html field?
     # long_description = HTMLField(_("long description"), max_length=3000, blank=True, null=True)
-    # kategorie: wykonawca, producent, wytwórnia, muzyk, woalista, itp.
 
     class Meta:
         verbose_name = _("Provider users")
