@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "web",
     "beats",
     "embed_video",
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -131,5 +132,8 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+LOGIN_URL = "all_beats_list"
+LOGIN_REDIRECT_URL = 'all_beats_list'
 
 HITCOUNT_KEEP_HIT_ACTIVE = {"seconds": 1}

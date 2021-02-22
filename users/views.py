@@ -4,7 +4,6 @@ from hitcount.views import HitCountDetailView
 
 from users.models import Profile, UserFollowing
 
-
 class ProfileDetailView(HitCountDetailView):
     model = Profile
     template_name = "users/profile.html"
@@ -16,6 +15,7 @@ def follow_user(request):
     if request.method == "POST":
         user_id = request.POST.get("user_id")
         user_obj = Profile.objects.get(id=user_id)
+
         if user not in user_obj.followers.all():
             UserFollowing.objects.get_or_create(following_from=user, follow_to=user_obj)
         else:
@@ -25,7 +25,6 @@ def follow_user(request):
 
 class FollowersList(ListView):
     """All users who follow User"""
-
     template_name = "users/followers_list.html"
     model = Profile
 
@@ -36,7 +35,6 @@ class FollowersList(ListView):
 
 class FollowedList(ListView):
     """All users who User follow"""
-
     template_name = "users/followed_list.html"
     model = Profile
 

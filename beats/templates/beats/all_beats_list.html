@@ -56,19 +56,14 @@
     <script>
         var infinite = new Waypoint.Infinite({
             element: $('.infinite-container')[0],
-
             offset: 'bottom-in-view',
-
             onBeforePageLoad() {
                 $('.loading').show();
                 $('.infinite-more-link').hide();
-
             },
             onAfterPageLoad: function () {
                 $(`.loading`).hide();
-
             }
-
         });
 
 
