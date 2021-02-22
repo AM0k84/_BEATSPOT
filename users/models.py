@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext_lazy as _
 from hitcount.models import HitCountMixin
 from hitcount.settings import MODEL_HITCOUNT
+from tinymce.models import HTMLField
 
 
 class UserFollowing(models.Model):
@@ -100,6 +101,8 @@ class ProviderProfile(models.Model):
     youtube_url = models.URLField(max_length=500, blank=True, null=True)
     instagram_url = models.URLField(max_length=500, blank=True, null=True)
     website_url = models.URLField(max_length=500, blank=True, null=True)
+    long_info = HTMLField(max_length=1500, null=False, blank=True)
+
     is_verify = models.BooleanField(_("Is verify"), default=False)
 
     # todo: add long description - html field?
