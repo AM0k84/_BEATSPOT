@@ -7,19 +7,45 @@
 
     {{ beat.beat_title }}<br>
 
-    {{ beat.likes.count }}
+    <div class="total-likes">
+        {% with total_likes=beat.likes.count %}
+            Polubień ({{ total_likes }})<br>
+        {% endwith %}
+    </div>
 
 
-    <form action="{% url 'beats:like_beat' %}" method="POST" class="follow-form" >
-            {% csrf_token %}
-            <input type="hidden" name="beat_id" value="{{ beat.id }}" class="follow_id">
-            <button type="submit" class="follow-btn{{ beat.id }} follow-btn">
-                {% if request.user not in beat.likes.all %}
-                    Like
-                {% else %}
-                    UnLike
-                {% endif %}
-            </button>
-        </form>
+    <form action="{% url 'beats:like_beat' %}" method="POST" class="like-form">
+        {% csrf_token %}
+        <input type="hidden" name="beat_id" value="{{ beat.id }}" class="like_id">
+        <button type="submit" class="like-btn{{ beat.id }} like-btn">
+            {% if request.user not in beat.likes.all %}
+                Like
+            {% else %}
+                UnLike
+            {% endif %}
+        </button>
+    </form>
 
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('.like-form').submit(function (e) {
+                e.preventDefault();
+                const csrf = $('input[name ="csrfmiddlewaretoken"]').val()
+                const beat_id = $('.like_id').val();
+                $.post('/beats/likes/', {'beat_id': beat_id, 'csrfmiddlewaretoken': csrf}, function (data) {
+                    console.log(data);
+                    $('.total-likes').html(`Polubień (${data.likes_number})`)
+                    if ($('.like-btn').html().trim() === 'Like') {
+                        $('.like-btn').html('UnLike');
+                    } else {
+                        $('.like-btn').html('Like');
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

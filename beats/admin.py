@@ -7,7 +7,6 @@ class BeatLikesInLine(TabularInlinePaginated):
     model = BeatLike
     extra = 1
     per_page = 1
-    # fk_name = "like_to"
 
 
 @admin.register(BeatLike)
