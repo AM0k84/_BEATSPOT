@@ -31,6 +31,8 @@ class BeatDetailView(DetailView):
 class AllBeatsList(ListView):
     model = Beat
     template_name = 'beats/all_beats_list.html'
+    context_object_name = 'all_beats'
+    paginate_by = 2
 
     def get_queryset(self):
         return self.model.objects.all().order_by('-pk')

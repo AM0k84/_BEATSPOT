@@ -11,6 +11,9 @@ class Base(models.Model):
     created_on = models.DateTimeField(_("created"), auto_now_add=True, null=True)
     edit_date = models.DateTimeField(_("edited"), auto_now=True)
 
+    class Meta:
+        abstract = True
+
 
 class BeatCategory(Base):
     category_name = models.CharField(_("category name"), max_length=128)
@@ -65,17 +68,16 @@ class Beat(Base):
         return self.beat_title
 
 
-class BeatLike(models.Model):
+class BeatLike(Base):
     like_from = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="like_from", verbose_name=_("Like from")
     )
     like_to = models.ForeignKey(Beat, on_delete=models.CASCADE, related_name="like_to", verbose_name=_("Like to"))
-    created = models.DateTimeField(_("created"), auto_now_add=True, db_index=True)
 
     class Meta:
         db_table = "beats_beatlike"
         constraints = [models.UniqueConstraint(fields=["like_from", "like_to"], name="unique_likes")]
-        ordering = ("-created",)
+        ordering = ("-created_on",)
 
     def __str__(self):
         return f"{self.like_from} lubi {self.like_to}"

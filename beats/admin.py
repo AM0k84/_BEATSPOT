@@ -16,13 +16,13 @@ class BeatLikeAdmin(admin.ModelAdmin):
         "id",
         "like_from",
         "like_to",
-        "created",
+        "created_on",
     )
     search_fields = (
         "like_from",
         "like_to",
     )
-    readonly_fields = ("created",)
+    readonly_fields = ("created_on",)
 
 
 @admin.register(BeatCategory)
